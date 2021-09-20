@@ -31,7 +31,6 @@ XCPRETTY_CMD=xcpretty
 LIZARD_CMD=lizard
 XCODEBUILD_CMD=xcodebuild
 
-
 trap "echo 'Script interrupted by Ctrl+C'; stopProgress; exit 1" SIGHUP SIGINT SIGTERM
 
 function startProgress() {
@@ -207,7 +206,7 @@ testScheme=''; readParameter testScheme 'sonar.swift.testScheme'
 # Get the path of plist file
 plistFile=`xcodebuild -showBuildSettings -project "${projectFile}" | grep -i 'PRODUCT_SETTINGS_PATH' -m 1 | sed 's/[ ]*PRODUCT_SETTINGS_PATH = //'`
 # Number version from plist if no sonar.projectVersion
-numVersionFromPlist=`defaults read "${plistFile}" CFBundleShortVersionString`
+numVerionFromPlist=`defaults read ${plistFile} CFBundleShortVersionString`
 
 # Read destination simulator
 destinationSimulator=''; readParameter destinationSimulator 'sonar.swift.simulator'
@@ -252,7 +251,7 @@ if [ "$vflag" = "on" ]; then
  	echo "Xcode project file is: $projectFile"
 	echo "Xcode workspace file is: $workspaceFile"
  	echo "Xcode application scheme is: $appScheme"
-    echo "Number version from plist is: $numVersionFromPlist"
+    echo "Number version from plist is: $numVerionFromPlist"
   if [ -n "$unittests" ]; then
  	    echo "Destination simulator is: $destinationSimulator"
  	    echo "Excluded paths from coverage are: $excludedPathsFromCoverage"
@@ -494,7 +493,7 @@ fi
 # The project version from properties file
 numVersionSonarRunner=''; readParameter numVersionSonarRunner 'sonar.projectVersion'
 if [ -z "$numVersionSonarRunner" -o "$numVersionSonarRunner" = " " ]; then
-	numVersionSonarRunner=" --define sonar.projectVersion=$numVersionFromPlist"
+	numVersionSonarRunner=" --define sonar.projectVersion=$numVerionFromPlist"
 else
 	#if we have version number in properties file, we don't overide numVersion for sonar-runner/sonar-scanner command
 	numVersionSonarRunner='';
